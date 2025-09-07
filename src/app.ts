@@ -52,9 +52,6 @@ app.use("/api/v1/users",usersRoutes);
 
 
 
-// crime route middleware
-app.use("/api/v1/crime",crimeRoutes);
-
 
 
 
