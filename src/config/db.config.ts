@@ -19,7 +19,20 @@ class Database {
       return;
     }
 
+    try {
+      const url = String(process.env.DB_URL);
+      if (!url) {
+        throw new Error("Database URL not found in environment variables.");
+      }
 
+      await mongoose.connect(url);
+      this.isConnected = true;
+      console.log("✅ MongoDB connected successfully!");
+    } catch (error) {
+      console.error("❌ MongoDB connection error:", error);
+      process.exit(1);
+    }
+  }
 
   public getConnection(): typeof mongoose {
     if (!this.isConnected) {

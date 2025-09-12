@@ -63,6 +63,47 @@ export const loginController = async (
   }
 };
 
+export const verifyEmail = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      res
+        .status(ResponseCode.BAD_REQUEST)
+        .json({ message: "Email is required" });
+      return;
+    }
+
+    const userExist = await doesUserAlreadyExist(email);
+    if (userExist) {
+      res.status(ResponseCode.CONFLICT).json({
+        message: "User with this email already exists",
+      });
+      return;
+    }
+
+    const isOtpSent = await sendOTP(email);
+
+    if (isOtpSent) {
+      res.status(ResponseCode.SUCCESS).json({
+        message: "OTP sent successfully",
+      });
+      return;
+    } else {
+      res.status(ResponseCode.INTERNAL_SERVER_ERROR).json({
+        message: "Error Occured While sending OTP!",
+      });
+      return;
+    }
+  } catch (error) {
+    console.error("Email Verification Error:", error);
+    res
+      .status(ResponseCode.INTERNAL_SERVER_ERROR)
+      .json({ message: "Internal Server Error" });
+  }
+};
 
 export const registerController = async (
   req: Request,

@@ -10,5 +10,16 @@ export const client = createClient({
   },
 });
 
-
+export const connectToRedis = async () => {
+  client.on("connect", () => {
+    console.log("connected to REDIS");
+  });
+  client.on("ready", () => {
+    console.log("Ready");
+  });
+  client.on("error", (err) => {
+    console.log(err, "redis");
+    process.exit();
+  });
+  await client.connect();
 };

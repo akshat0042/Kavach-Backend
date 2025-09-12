@@ -38,6 +38,19 @@ export const crimeReportController = async (
       }
     }
 
+    const report = new CrimeReportModel({
+      title,
+      type,
+      description,
+      location: {
+        type: "Point",
+        coordinates: [parseFloat(longitude), parseFloat(latitude)],
+      },
+      datetime: new Date(datetime),
+      mediaUrl,
+      anonymous: anonymous === "true", // ensure boolean
+      reportedBy,
+    });
 
     await report.save();
 

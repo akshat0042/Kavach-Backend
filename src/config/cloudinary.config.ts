@@ -51,5 +51,12 @@ export async function uploadToCloudinary(locaFilePath : string,resource_type:str
         }); 
 } 
 
-
+export async function deleteFromCloudinary(publicId : string) {
+    try {
+        const result = await cloudinary.uploader.destroy("main/"+publicId);
+        return true;
+    } catch (error) {
+        console.error('Error deleting file from Cloudinary:', error);
+        return false;
+    }
 }
