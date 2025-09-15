@@ -105,28 +105,6 @@ export const verifyEmail = async (
   }
 };
 
-export const registerController = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const { email, name, password, role = "public" } = req.body;
-
-    const userFactory = UserFactoryProvider.getFactory(role);
-    const newUser = await userFactory.createUser(name, email, password);
-
-    userFactory.generateAuthCookies(newUser, res);
-
-    res.status(ResponseCode.CREATED).json({
-      message: `${role} registered successfully.`,
-    });
-  } catch (error) {
-    console.error("Register Error:", error);
-    res
-      .status(ResponseCode.INTERNAL_SERVER_ERROR)
-      .json({ message: "Internal Server Error" });
-  }
-};
 
 export const logoutController = async (
   req: Request,
