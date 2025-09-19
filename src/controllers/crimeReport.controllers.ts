@@ -68,6 +68,67 @@ export const crimeReportController = async (
 
 // controllers/crimeController.ts
 
+export const getNearbyCrimes = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const lat = parseFloat(req.query.lat as string);
+    const lng = parseFloat(req.query.lng as string);
+    const radius = parseFloat(req.query.radius as string) || 3000;
+    const type = (req.query.type as string) || "All";
+    const time = (req.query.time as string) || "7d"; // default: past 7 days
+
+    if (isNaN(lat) || isNaN(lng)) {
+      res.status(ResponseCode.BAD_REQUEST).json({
+        message: "Invalid or missing latitude/longitude",
+      });
+      return;
+    }
+
+    // 🕒 Construct match filter
+    const matchFilter: any = { verificationStatus: "verified" };
+
+    // 🔹 Filter by type (ignore if 'All')
+    if (type && type !== "All") {
+      matchFilter.type = { $regex: new RegExp(type, "i") };
+    }
+
+    // 🔹 Compute time filter
+    const now = new Date();
+    const from = new Date();
+
+    switch (time) {
+      case "24h":
+        from.setDate(now.getDate() - 1);
+        break;
+      case "7d":
+        from.setDate(now.getDate() - 7);
+        break;
+      case "30d":
+        from.setDate(now.getDate() - 30);
+        break;
+      case "60d":
+        from.setDate(now.getDate() - 60);
+        break;
+      case "quarter":
+        from.setMonth(now.getMonth() - 3);
+        break;
+      case "half":
+        from.setMonth(now.getMonth() - 6);
+        break;
+      case "1y":
+        from.setFullYear(now.getFullYear() - 1);
+        break;
+      case "All":
+      default:
+        // No time filter
+        break;
+    }
+
+    if (time !== "All") {
+      matchFilter.datetime = { $gte: from, $lte: now };
+    }
 
     // 📍 Geo + Lookup Aggregation
     const crimes = await CrimeReportModel.aggregate([
@@ -318,67 +379,4 @@ export const getCrimeClusters = async (req: Request, res: Response) => {
       .status(ResponseCode.INTERNAL_SERVER_ERROR)
       .json({ error: "Internal Server Error" });
   }
-
-  export const getNearbyCrimes = async (
-      req: Request,
-      res: Response
-  ): Promise<void> => {
-    try {
-      const lat = parseFloat(req.query.lat as string);
-      const lng = parseFloat(req.query.lng as string);
-      const radius = parseFloat(req.query.radius as string) || 3000;
-      const type = (req.query.type as string) || "All";
-      const time = (req.query.time as string) || "7d"; // default: past 7 days
-
-      if (isNaN(lat) || isNaN(lng)) {
-        res.status(ResponseCode.BAD_REQUEST).json({
-          message: "Invalid or missing latitude/longitude",
-        });
-        return;
-      }
-
-      // 🕒 Construct match filter
-      const matchFilter: any = { verificationStatus: "verified" };
-
-      // 🔹 Filter by type (ignore if 'All')
-      if (type && type !== "All") {
-        matchFilter.type = { $regex: new RegExp(type, "i") };
-      }
-
-      // 🔹 Compute time filter
-      const now = new Date();
-      const from = new Date();
-
-      switch (time) {
-        case "24h":
-          from.setDate(now.getDate() - 1);
-          break;
-        case "7d":
-          from.setDate(now.getDate() - 7);
-          break;
-        case "30d":
-          from.setDate(now.getDate() - 30);
-          break;
-        case "60d":
-          from.setDate(now.getDate() - 60);
-          break;
-        case "quarter":
-          from.setMonth(now.getMonth() - 3);
-          break;
-        case "half":
-          from.setMonth(now.getMonth() - 6);
-          break;
-        case "1y":
-          from.setFullYear(now.getFullYear() - 1);
-          break;
-        case "All":
-        default:
-          // No time filter
-          break;
-      }
-
-      if (time !== "All") {
-        matchFilter.datetime = { $gte: from, $lte: now };
-      }
-
-    };
+};
