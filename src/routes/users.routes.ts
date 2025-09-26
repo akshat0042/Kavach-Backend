@@ -41,14 +41,7 @@ const router = Router();
 
 
 router.post("/login",loginValidations, loginController);
-router.post("/logout",logoutController)
 
-
-router.post("/googleAuth",googleAuth);
-
-router.post("/sendOTP",forgotPasswordSendOTP)
-
-router.post("/forgot-password",forgotPassword);
 
 
 router.post("/register",registerValidations,verifyOTPMiddleware,registerController);
@@ -57,7 +50,14 @@ router.post("/register",registerValidations,verifyOTPMiddleware,registerControll
 router.post("/verify-email",verifyEmail);
 
 
+router.post("/logout",logoutController)
 
+
+router.post("/googleAuth",googleAuth);
+
+router.post("/sendOTP",forgotPasswordSendOTP)
+
+router.post("/forgot-password",forgotPassword);
 
 
 export default router;

@@ -191,7 +191,22 @@ export const googleAuth = async (
       role: user.role,
     };
 
-    const token = generateToken(payl
+    const token = generateToken(payload);
+
+    res.cookie("authToken", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      sameSite: "lax",
+    });
+
+    res.cookie("role", user.role, {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      sameSite: "lax",
+    });
+
     res.status(ResponseCode.SUCCESS).json({
       message: "User Loggedin Successfully.!",
       result: true,

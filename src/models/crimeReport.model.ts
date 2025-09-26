@@ -32,7 +32,27 @@ const crimeReportSchema = new Schema<CrimeReport>(
     },
     description: { type: String, required: true },
 
-    ,
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+        required:true
+      },
+      coordinates: {
+        type: [Number], // [longitude, latitude]
+        required: true,
+      },
+    },
+
+    datetime: { type: Date, required: true },
+
+    mediaUrl: [
+      {
+        url: { type: String },
+        type: { type: String },
+      },
+    ],
 
     anonymous: { type: Boolean, required: true },
 
