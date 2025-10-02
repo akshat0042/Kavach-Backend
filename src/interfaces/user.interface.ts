@@ -4,10 +4,16 @@ import userToken from "./userToken.interface";
 export interface User extends Document {
   name: string;
   email: string;
+  password?: string;
+  role: 'admin' | 'public';
   createdAt: Date;
-  updatedAt: Date;
-  __v?: number;
-  tokens?: userToken[];
-  isVerified?:boolean;
 }
+
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: userToken;
+    }
+  }
 }
