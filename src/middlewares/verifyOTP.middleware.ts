@@ -15,6 +15,12 @@ const verifyOTPMiddleware = async(req: Request, res: Response, next: NextFunctio
         return;
     }
     next();
+
+  } catch (error) {
+    console.log("Error Occured While Verifying OTP :", error);
+    res.status(ResponseCode.INTERNAL_SERVER_ERROR).json({
+      message: "Internal Server Error",
+    });
   }
 };
 

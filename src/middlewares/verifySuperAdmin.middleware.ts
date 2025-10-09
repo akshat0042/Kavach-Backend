@@ -15,7 +15,14 @@ export const verifySuperAdmin =  (
         .json({ message: "Authentication token missing.!" });
       return;
     }
-
+    const user = verifyToken(authToken);
+    // console.log(user)
+    if (user.role !== "super-admin") {
+      res
+        .status(ResponseCode.UNAUTHORIZED)
+        .json({ message: "Login as Admin to use this feature.!" });
+      return;
+    }
 
     req.user = user;
     next();
@@ -24,13 +31,5 @@ export const verifySuperAdmin =  (
     res.status(ResponseCode.INTERNAL_SERVER_ERROR).json({
       message: "Internal Server Error",
     });
-  }
-  const user = verifyToken(authToken);
-  // console.log(user)
-  if (user.role !== "super-admin") {
-    res
-        .status(ResponseCode.UNAUTHORIZED)
-        .json({ message: "Login as Admin to use this feature.!" });
-    return;
   }
 };

@@ -27,6 +27,16 @@ export const crimeReportValidation = (req: Request, res: Response, next: NextFun
       return;
     }
 
+    if (!datetime || isNaN(Date.parse(datetime))) {
+      res.status(ResponseCode.BAD_REQUEST).json({ message: 'Datetime is required and must be a valid date/time string.' });
+      return;
+    }
+
+    if (anonymous !== "true" && anonymous !== "false") {
+      res.status(ResponseCode.BAD_REQUEST).json({ message: 'Anonymous must be "true" or "false".' });
+      return;
+    }
+
     next(); // ✅ All validations passed
   } catch (error) {
     console.error('Error Occurred In Crime Report Validations:', error);

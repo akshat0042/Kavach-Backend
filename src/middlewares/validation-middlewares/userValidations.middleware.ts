@@ -41,6 +41,38 @@ export const registerValidations = (
     if (!name) {
       res.status(ResponseCode.BAD_REQUEST).json({ message: "Name is required" });
       return;
+    }
+
+    if (!email) {
+      res.status(ResponseCode.BAD_REQUEST).json({ message: "Email is required" });
+      return;
+    }
+
+    if (!password) {
+      res.status(ResponseCode.BAD_REQUEST).json({ message: "Password is required" });
+      return;
+    }
+
+
+    if (!otp) {
+      res.status(ResponseCode.BAD_REQUEST).json({ message: "Password is required" });
+      return;
+    }
+
+
+    next();
+  } catch (error) {
+    console.log("Error Occured In Register Validations : ", error);
+    res.status(ResponseCode.INTERNAL_SERVER_ERROR).json({
+      message:"Internal Server Error.!"
+    })
+  }
+}
+
+export const addAdminValidations = (req: Request, res: Response, next: NextFunction) : void => {
+  const { name, email, password } = req.body;
+
+  const errors: string[] = [];
 
   // Validate Name
   if (!name || typeof name !== "string" || name.trim().length < 3) {
@@ -66,39 +98,6 @@ export const registerValidations = (
   // Sanitize input (trim whitespace)
   req.body.name = name.trim();
   req.body.email = email.trim().toLowerCase();
-    }
 
-        if (!email) {
-            res.status(ResponseCode.BAD_REQUEST).json({ message: "Email is required" });
-            return;
-        }
-
-        if (!password) {
-            res.status(ResponseCode.BAD_REQUEST).json({ message: "Password is required" });
-            return;
-        }
-
-
-        if (!otp) {
-            res.status(ResponseCode.BAD_REQUEST).json({ message: "Password is required" });
-            return;
-        }
-
-
-        next();
-    } catch (error) {
-        console.log("Error Occured In Register Validations : ", error);
-        res.status(ResponseCode.INTERNAL_SERVER_ERROR).json({
-            message:"Internal Server Error.!"
-        })
-    }
-}
-
-export const addAdminValidations = (req: Request, res: Response, next: NextFunction) : void => {
-    const { name, email, password } = req.body;
-
-    const errors: string[] = [];
-
-
-    next();
+  next();
 };

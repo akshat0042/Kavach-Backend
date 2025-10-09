@@ -7,6 +7,16 @@ export const verifySuperAdmin =  (
   res: Response,
   next: NextFunction
 ): void => {
+  try {
+    const { authToken } = req.cookies;
+    if (!authToken) {
+      res
+        .status(ResponseCode.FORBIDDEN)
+        .json({ message: "Authentication token missing.!" });
+      return;
+    }
+    const user = verifyToken(authToken);
+
     if (user.role !== "super-admin") {
       res
         .status(ResponseCode.UNAUTHORIZED)

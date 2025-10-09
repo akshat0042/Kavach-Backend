@@ -17,13 +17,6 @@ export function verifyUser(
     }
 
 
-  } catch (error) {
-    console.error('Error Occurred While Verifying User:', error);
-    res.status(ResponseCode.INTERNAL_SERVER_ERROR).json({
-      message: 'Internal Server Error',
-    });
-
-
     const user = verifyToken(authToken) as userToken;
 
     if (!user || typeof user !== 'object' || !('role' in user)) {
@@ -33,5 +26,10 @@ export function verifyUser(
 
     req.user = user; // Assuming you've extended `Request` with `user`
     next();
+  } catch (error) {
+    console.error('Error Occurred While Verifying User:', error);
+    res.status(ResponseCode.INTERNAL_SERVER_ERROR).json({
+      message: 'Internal Server Error',
+    });
   }
 }
