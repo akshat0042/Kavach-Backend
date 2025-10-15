@@ -31,6 +31,22 @@ export const sendOTP = async (email: string): Promise<Boolean> => {
   }
 };
 
+export const verifyOTP = async (
+  otp: string,
+  email: string
+): Promise<Boolean> => {
+  try {
+    const storedOtp = await client.get(email);
+    if(storedOtp ===  otp){
+      await client.del(email);
+      return true;
+    }
+    return false ;
+  } catch (error) {
+    console.error(" Error while Verifying OTP :", error);
+    return false;
+  }
+};
 
 export const otpHTMLBody = (body: string): string => {
   const htmlBody = `
