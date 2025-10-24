@@ -219,47 +219,6 @@ export const googleAuth = async (
   }
 };
 
-export const forgotPasswordSendOTP = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const { email } = req.body;
-    if (!email) {
-      res
-        .status(ResponseCode.BAD_REQUEST)
-        .json({ message: "Email is required" });
-      return;
-    }
-
-    const userExist = await doesUserAlreadyExist(email);
-    if (!userExist) {
-      res.status(ResponseCode.CONFLICT).json({
-        message: "Email is not registered.!",
-      });
-      return;
-    }
-
-    const isOtpSent = await sendOTP(email);
-
-    if (isOtpSent) {
-      res.status(ResponseCode.SUCCESS).json({
-        message: "OTP sent successfully",
-      });
-      return;
-    } else {
-      res.status(ResponseCode.INTERNAL_SERVER_ERROR).json({
-        message: "Error Occured While sending OTP!",
-      });
-      return;
-    }
-  } catch (error) {
-    console.error("Email Sending for Forgot password Error:", error);
-    res
-      .status(ResponseCode.INTERNAL_SERVER_ERROR)
-      .json({ message: "Internal Server Error" });
-  }
-};
 
 export const forgotPassword = async (
   req: Request,
@@ -314,6 +273,48 @@ export const forgotPassword = async (
     res
       .status(ResponseCode.INTERNAL_SERVER_ERROR)
       .json({ message: "Internal Server Error" });
+  }
+};
+
+export const forgotPasswordSendOTP = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      res
+          .status(ResponseCode.BAD_REQUEST)
+          .json({ message: "Email is required" });
+      return;
+    }
+
+    const userExist = await doesUserAlreadyExist(email);
+    if (!userExist) {
+      res.status(ResponseCode.CONFLICT).json({
+        message: "Email is not registered.!",
+      });
+      return;
+    }
+
+    const isOtpSent = await sendOTP(email);
+
+    if (isOtpSent) {
+      res.status(ResponseCode.SUCCESS).json({
+        message: "OTP sent successfully",
+      });
+      return;
+    } else {
+      res.status(ResponseCode.INTERNAL_SERVER_ERROR).json({
+        message: "Error Occured While sending OTP!",
+      });
+      return;
+    }
+  } catch (error) {
+    console.error("Email Sending for Forgot password Error:", error);
+    res
+        .status(ResponseCode.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal Server Error" });
   }
 };
 
