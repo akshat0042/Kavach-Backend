@@ -15,14 +15,6 @@ export const verifySuperAdmin =  (
         .json({ message: "Authentication token missing.!" });
       return;
     }
-    const user = verifyToken(authToken);
-
-    if (user.role !== "super-admin") {
-      res
-        .status(ResponseCode.UNAUTHORIZED)
-        .json({ message: "Login as Admin to use this feature.!" });
-      return;
-    }
 
     req.user = user;
     next();

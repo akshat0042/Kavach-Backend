@@ -40,19 +40,6 @@ class AuditLogger {
       });
     });
 
-    // New admin added event
-    appEventEmitter.on("admin_added", async (data) => {
-      await this.logEvent({
-        action: "New Admin Added",
-        performedBy: data.performedBy,
-        targetResource: "User",
-        targetId: data.adminId,
-        details: data.details || "A new admin account was created.",
-        userRole: data.userRole,
-        ipAddress: data.ipAddress,
-      });
-    });
-  }
 
   private async logEvent(logData: {
     action: string;
