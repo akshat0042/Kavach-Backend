@@ -21,6 +21,16 @@ export const getAllAuditLogsController = async (req: Request, res: Response): Pr
 
     const filters: Record<string, any> = {};
 
+    if (performedBy) filters.performedBy = performedBy;
+    if (action) filters.action = { $regex: new RegExp(String(action), "i") };
+    if (userRole) filters.userRole = userRole;
+    if (startDate && endDate) {
+      filters.timestamp = {
+        $gte: new Date(String(startDate)),
+        $lte: new Date(String(endDate)),
+      };
+    }
+
     const numericPage = Number(page);
     const numericLimit = Number(limit);
     const skip = (numericPage - 1) * numericLimit;

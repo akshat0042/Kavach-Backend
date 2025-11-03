@@ -11,7 +11,7 @@ const router = Router();
 
 router.post("/report-crime",upload.array("media"),verifyUser,crimeReportValidation,crimeReportController);
 
-router.get("/nearby",verifyUser, getNearbyCrimes);
+router.get("/nearby",verifyUser, getNearbyCrimes); 
 
 router.get("/my-reports",verifyUser,getMyCrimeReports)
 
@@ -26,6 +26,8 @@ router.get("/getAllUnverifiedCrimes",verifyAdmin,getAllUnverifiedCrimes);
 router.get("/getAllverifiedCrimes",verifyAdmin,getAllverifiedCrimes);
 
 router.patch("/:id/verify",verifyAdmin,changeVerificationStatus);
+
+
 
 
 
