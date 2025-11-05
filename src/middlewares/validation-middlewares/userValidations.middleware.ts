@@ -41,38 +41,6 @@ export const registerValidations = (
     if (!name) {
       res.status(ResponseCode.BAD_REQUEST).json({ message: "Name is required" });
       return;
-    }
-
-    if (!email) {
-      res.status(ResponseCode.BAD_REQUEST).json({ message: "Email is required" });
-      return;
-    }
-    
-    if (!password) {
-      res.status(ResponseCode.BAD_REQUEST).json({ message: "Password is required" });
-      return;
-    }
-
-    
-    if (!otp) {
-      res.status(ResponseCode.BAD_REQUEST).json({ message: "Password is required" });
-      return;
-    }
-
-
-    next();
-  } catch (error) {
-    console.log("Error Occured In Register Validations : ", error);
-    res.status(ResponseCode.INTERNAL_SERVER_ERROR).json({
-      message:"Internal Server Error.!"
-    })
-  }
-}
-
-export const addAdminValidations = (req: Request, res: Response, next: NextFunction) : void => {
-  const { name, email, password } = req.body;
-
-  const errors: string[] = [];
 
   // Validate Name
   if (!name || typeof name !== "string" || name.trim().length < 3) {
@@ -80,16 +48,7 @@ export const addAdminValidations = (req: Request, res: Response, next: NextFunct
   }
 
   // Validate Email
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!email || typeof email !== "string" || !emailRegex.test(email)) {
-    errors.push("A valid email address is required.");
-  }
-
-  // Validate Password
-  if (!password || typeof password !== "string" || password.length < 6) {
-    errors.push("Password must be at least 6 characters long.");
-  }
-
+  const emailReg
   // If any validation fails
   if (errors.length > 0) {
      res.status(ResponseCode.BAD_REQUEST).json({ success: false, errors });

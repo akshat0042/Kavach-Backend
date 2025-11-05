@@ -14,20 +14,7 @@ class AuditLogger {
   private initializeListeners() {
     // Crime verification event
     
-    appEventEmitter.on("crime_verified", async (data) => {
-      await this.logEvent({
-        action: "Crime Verified",
-        performedBy: data.performedBy,
-        targetResource: "CrimeReport",
-        targetId: data.crimeId,
-        details: data.details || "A crime report was verified by an admin.",
-        userRole: data.userRole,
-        ipAddress: data.ipAddress,
-      });
-    });
-
-    // Admin status updated event
-    appEventEmitter.on("admin_status_updated", async (data) => {
+   in_status_updated", async (data) => {
         
       await this.logEvent({
         action: "Admin Status Updated",
