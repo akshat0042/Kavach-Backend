@@ -17,7 +17,19 @@ interface IUserFactory {
 
 export class PublicUserFactory implements IUserFactory {
   async createUser(name: string, email: string, password: string) {
-    const hashedPassword = await hashPassword(password)
+    const hashedPassword = await hashPassword(password);
+    const newUser = new User({
+      name,
+      email,
+      role: "public",
+      password: hashedPassword,
+    });
+    return newUser.save();
+  }
+
+  generateAuthCookies(user: any, res: Response) {
+    const payload: userToken = {
+      _id: String(user._id),
       email: user.email,
       role: user.role,
     };

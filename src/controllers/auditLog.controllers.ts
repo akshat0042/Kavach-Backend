@@ -14,7 +14,16 @@ export const getAllAuditLogsController = async (req: Request, res: Response): Pr
       limit = 20,
       performedBy,
       action,
-      userRole,rs.userRole = userRole;
+      userRole,
+      startDate,
+      endDate,
+    } = req.query;
+
+    const filters: Record<string, any> = {};
+
+    if (performedBy) filters.performedBy = performedBy;
+    if (action) filters.action = { $regex: new RegExp(String(action), "i") };
+    if (userRole) filters.userRole = userRole;
     if (startDate && endDate) {
       filters.timestamp = {
         $gte: new Date(String(startDate)),
@@ -46,40 +55,7 @@ export const getAllAuditLogsController = async (req: Request, res: Response): Pr
       },
     });
   } catch (error) {
-    console.error("Error fetching audit logs:", er
-    }
-
-    if (!email) {
-      res.status(ResponseCode.BAD_REQUEST).json({ message: "Email is required" });
-      return;
-    }
-
-    if (!password) {
-      res.status(ResponseCode.BAD_REQUEST).json({ message: "Password is required" });
-      return;
-    }
-
-
-    if (!otp) {
-      res.status(ResponseCode.BAD_REQUEST).json({ message: "Password is required" });
-      return;
-    }
-
-
-    next();
-  } catch (error) {
-    console.log("Error Occured In Register Validations : ", error);
-    res.status(ResponseCode.INTERNAL_SERVER_ERROR).json({
-      message:"Internal Server Error.!"
-    })
-  }
-}
-
-export const addAdminValidations = (req: Request, res: Response, next: NextFunction) : void => {
-  const { name, email, password } = req.body;
-
-  const errors: string[] = [];
-  ror);
+    console.error("Error fetching audit logs:", error);
     res
       .status(ResponseCode.INTERNAL_SERVER_ERROR)
       .json({ message: "Internal Server Error while fetching audit logs." });
