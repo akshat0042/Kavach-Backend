@@ -128,6 +128,31 @@ export const registerController = async (
   }
 };
 
+export const logoutController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    res.clearCookie("authToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+    res.clearCookie("role", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+    res.status(ResponseCode.SUCCESS).json({
+      message: "Logout Successfully.!",
+    });
+  } catch (error) {
+    console.error("Logout Error:", error);
+    res
+      .status(ResponseCode.INTERNAL_SERVER_ERROR)
+      .json({ message: "Internal Server Error" });
+  }
+};
 
 export const googleAuth = async (
   req: Request,
@@ -145,6 +170,21 @@ export const googleAuth = async (
     // console.log(userRes);
     let user = await User.findOne({ email });
 
+    if (!user) {
+      user = await User.create({
+        name,
+        email,
+        role: "public",
+      });
+    } else {
+      if (!user.isActive) {
+        res.status(ResponseCode.FORBIDDEN).json({
+          message: "Login Disabled",
+          result: false,
+        });
+        return;
+      }
+    }
     const payload: userToken = {
       _id: String(user._id),
       email: user.email,

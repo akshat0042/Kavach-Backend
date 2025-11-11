@@ -131,7 +131,28 @@ export const getNearbyCrimes = async (
     }
 
     // 📍 Geo + Lookup Aggregation
-
+    const crimes = await CrimeReportModel.aggregate([
+      {
+        $geoNear: {
+          near: { type: "Point", coordinates: [lng, lat] },
+          distanceField: "distance",
+          maxDistance: radius, // meters
+          spherical: true,
+          query: matchFilter,
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "reportedBy",
+          foreignField: "_id",
+          as: "reportedBy",
+        },
+      },
+      { $unwind: "$reportedBy" },
+      { $unset: "reportedBy.password" },
+      { $sort: { datetime: -1 } },
+    ]);
 
     res.status(ResponseCode.SUCCESS).json({
       data: crimes,
@@ -143,7 +164,16 @@ export const getNearbyCrimes = async (
       message: "Internal Server Error",
     });
   }
-};eCode.SUCCESS).json({ data: myReports });
+};
+
+export const getMyCrimeReports = async (req: Request, res: Response) => {
+  try {
+    const userId = req?.user?._id;
+
+    const myReports = await CrimeReportModel.find({ reportedBy: userId }).sort({
+      createdAt: -1,
+    });
+    res.status(ResponseCode.SUCCESS).json({ data: myReports });
   } catch (err) {
     console.error("Error fetching user's crime reports:", err);
     res
