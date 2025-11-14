@@ -8,13 +8,14 @@ import { Request,Response } from "express";
 import cookieParser from "cookie-parser";
 import usersRoutes from "./routes/users.routes.js";
 import crimeRoutes from "./routes/crimeReport.routes.js";
+import auditRoutes from "./routes/auditLog.routes.js";
 
 const app = express();
 
-// implemented cors middleware
+// implemented cors middleware 
 app.use(cors({
-    origin: String(process.env.FRONTEND_URL),
-    credentials:true
+  origin: String(process.env.FRONTEND_URL),
+  credentials:true
 }));
 
 
@@ -35,13 +36,13 @@ app.use(cookieParser());
 // Swagger UI Middleware
 
 app.get("/swagger.json", (_req : Request, res : Response) => {
-    res.setHeader("Content-Type", "application/json");
-    res.send(swaggerSpec);
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
 });
 
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(undefined, {
-    swaggerUrl: "/swagger.json", // ✅ Not a file path!
+  swaggerUrl: "/swagger.json", // ✅ Not a file path!
 }));
 
 
@@ -54,6 +55,11 @@ app.use("/api/v1/users",usersRoutes);
 
 // crime route middleware
 app.use("/api/v1/crime",crimeRoutes);
+
+// auditlog route middleware
+app.use("/api/v1/audit-logs",auditRoutes);
+
+
 
 
 

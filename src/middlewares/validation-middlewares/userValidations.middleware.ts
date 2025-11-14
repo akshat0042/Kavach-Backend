@@ -47,13 +47,13 @@ export const registerValidations = (
       res.status(ResponseCode.BAD_REQUEST).json({ message: "Email is required" });
       return;
     }
-
+    
     if (!password) {
       res.status(ResponseCode.BAD_REQUEST).json({ message: "Password is required" });
       return;
     }
 
-
+    
     if (!otp) {
       res.status(ResponseCode.BAD_REQUEST).json({ message: "Password is required" });
       return;

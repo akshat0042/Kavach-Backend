@@ -3,18 +3,18 @@ import { Options } from "swagger-jsdoc";
 
 // Define your Swagger specification
 const swaggerDefinition = {
-    openapi: "3.0.0",
-    info: {
-        title: "Kavach API",
-        version: "1.0.0",
-        description: "Kavach APIs Description",
-    },
+  openapi: "3.0.0",
+  info: {
+    title: "Kavach API",
+    version: "1.0.0",
+    description: "Kavach APIs Description",
+  },
 };
 
 // Define options for swagger-jsdoc
 const options: Options = {
-    swaggerDefinition,
-    apis: ["./routes/*.ts", "./routes/*.js"], // ✅ Fixed here
+  swaggerDefinition,
+  apis: ["./routes/*.ts", "./routes/*.js"], // ✅ Fixed here
 };
 
 // Generate Swagger spec
