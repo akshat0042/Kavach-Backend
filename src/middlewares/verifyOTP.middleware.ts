@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ResponseCode } from "../utils/responseCode.enum.js";
+import { ResponseCode } from "../enums/responseCode.enum.js";
 import { verifyOTP } from "../utils/otpUtils.js";
 
 const verifyOTPMiddleware = async(req: Request, res: Response, next: NextFunction) => {

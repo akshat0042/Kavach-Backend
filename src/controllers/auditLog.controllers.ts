@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import AuditLogModel from "../models/auditLog.model.js";
-import { ResponseCode } from "../utils/responseCode.enum.js";
+import { ResponseCode } from "../enums/responseCode.enum.js";
 
 /**
  * Controller: Get all audit logs with optional filters and pagination

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/users.model.js";
-import { ResponseCode } from "../utils/responseCode.enum.js";
+import { ResponseCode } from "../enums/responseCode.enum.js";
 import {
   comparePassword,
   emailHTMLTemplate,

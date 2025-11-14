@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import CrimeReportModel from "../models/crimeReport.model.js";
-import { ResponseCode } from "../utils/responseCode.enum.js";
+import { ResponseCode } from "../enums/responseCode.enum.js";
 import { uploadToCloudinary } from "../config/cloudinary.config.js";
 import CrimeReport from "../interfaces/crimeReport.interface.js";
 import { appEventEmitter } from "../patterns/observers/eventEmitter.js";
