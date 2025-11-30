@@ -15,7 +15,9 @@ const app = express();
 // implemented cors middleware 
 app.use(cors({
   origin: String(process.env.FRONTEND_URL),
-  credentials:true
+  credentials:true,
+  allowedHeaders: ["Content-Type", "Authorization"],
+  exposedHeaders: ["Set-Cookie"],
 }));
 
 
