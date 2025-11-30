@@ -133,16 +133,22 @@ export const logoutController = async (
   res: Response
 ): Promise<void> => {
   try {
+    const isProd = process.env.NODE_ENV === "production";
+
     res.clearCookie("authToken", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isProd,
       sameSite: "none",
+      path: "/", // <--- REQUIRED
     });
+
     res.clearCookie("role", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      httpOnly: isProd,
+      secure: isProd,
       sameSite: "none",
+      path: "/", // <--- REQUIRED
     });
+
     res.status(ResponseCode.SUCCESS).json({
       message: "Logout Successfully.!",
     });
@@ -193,6 +199,7 @@ export const googleAuth = async (
 
     const token = generateToken(payload);
 
+
     const isProd = process.env.NODE_ENV === "production";
 
     res.cookie("authToken", token, {
@@ -204,12 +211,13 @@ export const googleAuth = async (
     });
 
     res.cookie("role", user.role, {
-      httpOnly: false,
+      httpOnly: isProd,
       secure: isProd,
       sameSite: "none",
       path: "/",
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
+
 
     res.status(ResponseCode.SUCCESS).json({
       message: "User Loggedin Successfully.!",
@@ -494,7 +502,7 @@ export const getAllUsersController = async (req: Request, res: Response) => {
                 type: "$$crime.type",
                 description: "$$crime.description",
                 datetime: "$$crime.datetime",
-                isVerified: "$$crime.isVerified",
+                verificationStatus: "$$crime.verificationStatus",
                 location: "$$crime.location",
               },
             },
