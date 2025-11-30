@@ -47,7 +47,7 @@ export class PublicUserFactory implements IUserFactory {
     });
 
     res.cookie("role", user.role, {
-      httpOnly: false,
+      httpOnly: true,
       secure: isProd,
       sameSite: "none",
       path: "/",
