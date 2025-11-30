@@ -41,18 +41,26 @@ export class PublicUserFactory implements IUserFactory {
     res.cookie("authToken", token, {
       httpOnly: true,
       secure: isProd,
-      sameSite: "none",
+      sameSite: "lax",
       path: "/",
       maxAge: 30 * 24 * 60 * 60 * 1000,
+      // domain: isProd
+      //   ? String(process.env.FRONTEND_URL).replace(/^https?:\/\//, "")
+      //   : "localhost",
     });
 
     res.cookie("role", user.role, {
-      httpOnly: isProd,
+      httpOnly: false,
       secure: isProd,
-      sameSite: "none",
+      sameSite: "lax", // <-- simplest, works without https
       path: "/",
       maxAge: 30 * 24 * 60 * 60 * 1000,
+      // domain: isProd
+      //   ? String(process.env.FRONTEND_URL).replace(/^https?:\/\//, "")
+      //   : "localhost",
     });
+
+    res.setHeader("Access-Control-Allow-Credentials", "true");
   }
 }
 

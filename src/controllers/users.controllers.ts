@@ -54,6 +54,7 @@ export const loginController = async (
 
     res.status(ResponseCode.SUCCESS).json({
       message: `${user.role} logged in successfully.`,
+      role: user.role
     });
   } catch (error) {
     console.error("Login Error:", error);
@@ -119,6 +120,7 @@ export const registerController = async (
 
     res.status(ResponseCode.CREATED).json({
       message: `${role} registered successfully.`,
+      role: role
     });
   } catch (error) {
     console.error("Register Error:", error);
@@ -198,31 +200,39 @@ export const googleAuth = async (
     };
 
     const token = generateToken(payload);
-
-
     const isProd = process.env.NODE_ENV === "production";
 
     res.cookie("authToken", token, {
       httpOnly: true,
       secure: isProd,
-      sameSite: "none",
+      sameSite: "lax",
       path: "/",
       maxAge: 30 * 24 * 60 * 60 * 1000,
+      // domain: isProd
+      //   ? String(process.env.FRONTEND_URL).replace(/^https?:\/\//, "")
+      //   : "localhost",
     });
 
     res.cookie("role", user.role, {
-      httpOnly: isProd,
+      httpOnly: false,
       secure: isProd,
-      sameSite: "none",
+      sameSite: "lax", // <-- simplest, works without https
       path: "/",
       maxAge: 30 * 24 * 60 * 60 * 1000,
+      // domain: isProd
+      //   ? String(process.env.FRONTEND_URL).replace(/^https?:\/\//, "")
+      //   : "localhost",
     });
+
+    res.setHeader("Access-Control-Allow-Credentials", "true");
 
 
     res.status(ResponseCode.SUCCESS).json({
       message: "User Loggedin Successfully.!",
       result: true,
+      role:user.role
     });
+
   } catch (err) {
     console.error("Google Auth Error:", err);
     res
