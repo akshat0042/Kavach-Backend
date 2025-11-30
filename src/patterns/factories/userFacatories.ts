@@ -38,20 +38,21 @@ export class PublicUserFactory implements IUserFactory {
 
     res.cookie("authToken", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
+      secure: true,
       sameSite: "none",
-      domain: ".vercel.app",
+      domain: undefined, // IMPORTANT: remove hard-coded domain for cross platform
+      path: "/",
+      maxAge: 2592000000,
     });
 
     res.cookie("role", user.role, {
       httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
+      secure: true,
       sameSite: "none",
-      domain: ".vercel.app",
+      domain: undefined,
+      path: "/",
+      maxAge: 2592000000,
     });
-
   }
 }
 
