@@ -136,12 +136,12 @@ export const logoutController = async (
     res.clearCookie("authToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "none",
     });
     res.clearCookie("role", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: "none",
     });
     res.status(ResponseCode.SUCCESS).json({
       message: "Logout Successfully.!",
@@ -197,14 +197,16 @@ export const googleAuth = async (
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 30 * 24 * 60 * 60 * 1000,
-      sameSite: "lax",
+      sameSite: "none",
+      domain: ".vercel.app",
     });
 
     res.cookie("role", user.role, {
       httpOnly: false,
       secure: process.env.NODE_ENV === "production",
       maxAge: 30 * 24 * 60 * 60 * 1000,
-      sameSite: "lax",
+      sameSite: "none",
+      domain: ".vercel.app",
     });
 
     res.status(ResponseCode.SUCCESS).json({
@@ -436,8 +438,6 @@ export const updateActiveStatusController = async (
       res.status(ResponseCode.NOT_FOUND).json({ error: "User not found." });
       return;
     }
-
-    
 
     appEventEmitter.emit("admin_status_updated", {
       performedBy: req.user?._id,
