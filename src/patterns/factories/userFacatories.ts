@@ -36,22 +36,22 @@ export class PublicUserFactory implements IUserFactory {
 
     const token = generateToken(payload);
 
+    const isProd = process.env.NODE_ENV === "production";
+
     res.cookie("authToken", token, {
       httpOnly: true,
-      secure: true,
+      secure: isProd,
       sameSite: "none",
-      domain: undefined, // IMPORTANT: remove hard-coded domain for cross platform
       path: "/",
-      maxAge: 2592000000,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
     res.cookie("role", user.role, {
       httpOnly: false,
-      secure: true,
+      secure: isProd,
       sameSite: "none",
-      domain: undefined,
       path: "/",
-      maxAge: 2592000000,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
     });
   }
 }
